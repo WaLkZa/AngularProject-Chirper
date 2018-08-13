@@ -18,7 +18,7 @@ footer>* {
   line-height: 40px;
 }
 
-#main>div {
+.menu, .content{
   margin: auto;
   padding: 20px;
   max-width: 800px;
@@ -32,6 +32,11 @@ footer>* {
   color: #e0e0e0;
   text-decoration: none;
   padding: 5px 10px;
+}
+
+.menu a:last-of-type {
+  padding: 1px;
+  float: right;
 }
 
 .menu>a:hover {

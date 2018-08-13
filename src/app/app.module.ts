@@ -11,7 +11,9 @@ import { AppRoutingModule } from './app.routing';
 import { NavigationComponent } from './navigation/navigation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthService } from './authentication/auth.service';
+import { AuthService } from './services/auth.service';
+import { ChirpService } from './services/chirp.service';
+import { UserService } from './services/user.service';
 import { LogoutComponent } from './authentication/logout/logout.component';
 import { HomeComponent } from './home/home.component';
 
@@ -33,7 +35,7 @@ import { HomeComponent } from './home/home.component';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [AuthService],
+  providers: [AuthService, ChirpService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
