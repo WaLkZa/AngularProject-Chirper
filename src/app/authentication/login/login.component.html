@@ -1,0 +1,9 @@
+<!-- {{model | json}} -->
+<form id="formLogin" class="form chirps" #loginForm="ngForm" (ngSubmit)="login()">
+  <label>Username</label>
+  <input name="username" type="text" required [(ngModel)]="model.username" #username="ngModel">
+  <label>Password</label>
+  <input name="password" type="password" required [(ngModel)]="model.password" #password="ngModel">
+  <input id="btnLogin" value="Sign In" type="submit">
+  <a routerLink="/register">Register</a>
+</form>

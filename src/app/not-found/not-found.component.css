@@ -1,0 +1,14 @@
+.not-found {
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+  color: gray;
+}
+
+p:nth-child(1) {
+  font-size: 100px;
+}
+
+p:nth-child(2) {
+  font-size: 20px;
+}

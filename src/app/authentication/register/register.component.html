@@ -1,0 +1,21 @@
+<!-- {{model | json}} -->
+<form class="form chirps" id="formRegister" #registrationForm="ngForm" (ngSubmit)="register()">
+
+  <label for="username">Username</label>
+  <input name="username" type="text" required [(ngModel)]="model.username" #username="ngModel">
+  <label>Password</label>
+  <input name="password" type="password" required [(ngModel)]="model.password" #password="ngModel">
+  <label>Repeat Password</label>
+  <input name="repeatPass" type="password" required [(ngModel)]="model.repeatPass" #repeatPass="ngModel">
+
+  <input id="btnRegister" value="Register" type="submit" [disabled]="registrationForm.form.invalid">
+  <a routerLink="/login">Log in</a>
+
+  <div [hidden]="password.value === repeatPass.value || repeatPass.pristine">
+    Both passwords must match.
+  </div>
+
+  <div *ngIf="loginFailed">
+    {{errMessage}}
+  </div>
+</form>
