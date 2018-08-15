@@ -17,12 +17,12 @@ export class LogoutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-      this.authService.logout()
-        .subscribe(data => {
-          this.toastr.success('Logout successful.')
-          localStorage.clear()
-          this.authService.authtoken = ""
-          this.router.navigate(['/login'])
-        })
+    this.authService.logout()
+      .subscribe(data => {
+        this.toastr.success('Logout successful.')
+        sessionStorage.clear()
+        this.authService.authtoken = ""
+        this.router.navigate(['/login'])
+      })
   }
 }

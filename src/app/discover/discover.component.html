@@ -1,0 +1,16 @@
+<div class="content">
+  <div class="chirps">
+    <h2 class="titlebar">Discover</h2>
+    <div id="userlist">
+      <div class="userbox" *ngFor="let u of users">
+        <div>
+          <a routerLink="{{u._id}}" class="chirp-author">{{u.username}}</a>
+        </div>
+
+        <div class="user-details">
+          <span>{{u.followers}} followers</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

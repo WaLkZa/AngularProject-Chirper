@@ -16,6 +16,8 @@ import { ChirpService } from './services/chirp.service';
 import { UserService } from './services/user.service';
 import { LogoutComponent } from './authentication/logout/logout.component';
 import { HomeComponent } from './home/home.component';
+import { DiscoverComponent } from './discover/discover.component';
+import { UserFeedComponent } from './user-feed/user-feed.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { HomeComponent } from './home/home.component';
     NavigationComponent,
     NotFoundComponent,
     LogoutComponent,
-    HomeComponent
+    HomeComponent,
+    DiscoverComponent,
+    UserFeedComponent
   ],
   imports: [
     BrowserModule,

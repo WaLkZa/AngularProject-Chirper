@@ -49,17 +49,17 @@ export class AuthService {
     }
 
     isAuthenticated() {
-        //return this.currentAuthtoken === localStorage.getItem('authtoken');
-        return localStorage.getItem('authtoken') !== null;
+        //return this.currentAuthtoken === sessionStorage.getItem('authtoken');
+        return sessionStorage.getItem('authtoken') !== null;
     }
 
     saveSession(userInfo) {
         let userAuth = userInfo._kmd.authtoken;
-        localStorage.setItem('authtoken', userAuth);
+        sessionStorage.setItem('authtoken', userAuth);
         let username = userInfo.username;
-        localStorage.setItem('username', username);
-        localStorage.setItem('userId', userInfo._id);
-        localStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
+        sessionStorage.setItem('username', username);
+        sessionStorage.setItem('userId', userInfo._id);
+        sessionStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
     }
 
     private createAuthHeaders(type: string) {
@@ -70,7 +70,7 @@ export class AuthService {
             })
         } else {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
+                'Authorization': `Kinvey ${sessionStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         }

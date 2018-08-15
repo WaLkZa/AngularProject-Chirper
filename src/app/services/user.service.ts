@@ -21,11 +21,11 @@ export class UserService {
     loadUserFollowers(username: string) {
         let endpoint = `?query={"subscriptions":"${username}"}`
 
-        return this.http.get(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
     }
 
     loadAllUsers() {
-        return this.http.get(baseUrl, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(baseUrl, { headers: this.createAuthHeaders("Kinvey") })
     }
 
     modifyUser(userId, newSubs) {
@@ -49,7 +49,7 @@ export class UserService {
             })
         } else if (type === "Kinvey") {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
+                'Authorization': `Kinvey ${sessionStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         } else if (type === "Master") {

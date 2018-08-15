@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ChirpService } from '../services/chirp.service';
-import { forkJoin } from 'rxjs';
 import { UserService } from '../services/user.service';
-import { SubmitChirpModel } from '../models/submit-chirp.model';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
+import { SubmitChirpModel } from '../models/submit-chirp.model';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-user-feed',
+  templateUrl: './user-feed.component.html',
+  styleUrls: ['./user-feed.component.css']
 })
-export class HomeComponent implements OnInit {
+export class UserFeedComponent implements OnInit {
   model: SubmitChirpModel
   username: string
   chirpsCount: number
@@ -28,40 +28,23 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    let allFollowedChirps = []
-
-    let users = JSON.parse(sessionStorage.getItem('subscriptions'))
-
-    for (let user of users) {
-      allFollowedChirps.push(this.chirpService.loadAllChirpsByUsername(user))
-    }
-
-    forkJoin(allFollowedChirps)
-      .subscribe(arr => {
-        if (arr.length > 0) {
-          let allChirpsInOneArray = arr.reduce((result, current) => {
-            return result.concat(current)
-          })
-
-          allChirpsInOneArray.forEach(c => {
-            c.time = this.dateConvertor(c._kmd.ect)
-          })
-
-          this.chirps = allChirpsInOneArray
-        }
-      })
-
     forkJoin(
       [
         this.chirpService.loadAllChirpsByUsername(this.username),
-        this.userService.loadUserFollowers(this.username)
-      ]
-    ).subscribe(([chirpsByUser, followersArr]) => {
-      this.chirpsCount = (<any>chirpsByUser).length
-      this.following = JSON.parse(sessionStorage.getItem('subscriptions')).length
-      this.followers = (<any>followersArr).length
-    }
-    )
+        this.userService.loadUserFollowers(this.username),
+        this.userService.loadUserByUsername(this.username)
+      ]).subscribe(([chirpsArr, followersArr, user]) => {
+        this.chirpsCount = chirpsArr.length
+        this.following = user[0].subscriptions.length
+        this.followers = followersArr.length
+
+        chirpsArr.forEach(c => {
+          c.time = this.dateConvertor(c._kmd.ect)
+          c.isAuthor = c.author === sessionStorage.getItem('username')
+        })
+
+        this.chirps = chirpsArr
+      })
   }
 
   submitChirp() {

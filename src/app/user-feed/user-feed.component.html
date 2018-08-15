@@ -1,0 +1,33 @@
+<div class="content">
+  <div class="chirper">
+
+    <h2 class="titlebar">{{username}}</h2>
+
+    <form id="formSubmitChirp" class="chirp-form" #formSubmitChirp="ngForm" (ngSubmit)="submitChirp()">
+      <textarea name="text" class="chirp-input" required [(ngModel)]="model.text" #text="ngModel"></textarea>
+      <input class="chirp-submit" id="btnSubmitChirp" value="Chirp" type="submit">
+    </form>
+
+    <div id="myStats" class="user-details">
+      <span>{{chirpsCount}} chirps</span> |
+      <span>{{following}} following</span> |
+      <span>{{followers}} followers</span>
+    </div>
+  </div>
+  <div id="chirps" class="chirps">
+    <h2 class="titlebar">My Chirps</h2>
+    <article class="chirp" *ngFor="let c of chirps">
+      <div class="titlebar">
+        <a routerLink="/feed/{{username}}" class="chirp-author">{{c.author}}</a>
+        <span class="chirp-time">
+          <a routerLink="/editChirp/{{c._id}}">edit </a>
+          <a routerLink="/deleteChirp/{{c._id}}">delete </a> {{c.time}}
+        </span>
+      </div>
+      <p>{{c.text}}</p>
+    </article>
+    <div class="chirp" *ngIf="!chirps?.length">
+      <span class="loading">No chirps in database</span>
+    </div>
+  </div>
+</div>

@@ -15,13 +15,13 @@ export class ChirpService {
     loadFollowersChirps(subs) {
         let endpoint = `chirps?query={"author":{"$in": [${subs}]}}&sort={"_kmd.ect": -1}`
 
-        return this.http.get(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
     }
 
     loadAllChirpsByUsername(username: string) {
         let endpoint: string = `chirps?query={"author":"${username}"}&sort={"_kmd.ect": -1}`
 
-        return this.http.get(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
     }
 
     loadChirpById(chirpId) {
@@ -68,7 +68,7 @@ export class ChirpService {
             })
         } else if (type === "Kinvey") {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
+                'Authorization': `Kinvey ${sessionStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         } else if (type === "Master") {
