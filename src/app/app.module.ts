@@ -18,6 +18,8 @@ import { LogoutComponent } from './authentication/logout/logout.component';
 import { HomeComponent } from './home/home.component';
 import { DiscoverComponent } from './discover/discover.component';
 import { UserFeedComponent } from './user-feed/user-feed.component';
+import { EditChirpComponent } from './edit-chirp/edit-chirp.component';
+import { ForeignFeedComponent } from './foreign-feed/foreign-feed.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { UserFeedComponent } from './user-feed/user-feed.component';
     LogoutComponent,
     HomeComponent,
     DiscoverComponent,
-    UserFeedComponent
+    UserFeedComponent,
+    EditChirpComponent,
+    ForeignFeedComponent
   ],
   imports: [
     BrowserModule,

@@ -27,7 +27,7 @@ export class ChirpService {
     loadChirpById(chirpId) {
         let endpoint = `chirps?query={"_id":"${chirpId}"}`
 
-        return this.http.get(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
     }
 
     loadAllChirps() {

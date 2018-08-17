@@ -1,0 +1,9 @@
+<div class="content">
+  <div class="chirper">
+    <h2 class="titlebar">{{author}}</h2>
+    <form id="formSubmitChirp" class="chirp-form" #formEditChirp="ngForm" (ngSubmit)="editChirp()">
+      <textarea name="text" class="chirp-input" required [(ngModel)]="model.text" #text="ngModel" value="{{text}}"></textarea>
+      <input class="chirp-submit" id="btnSubmitChirp" value="Edit" type="submit">
+    </form>
+  </div>
+</div>

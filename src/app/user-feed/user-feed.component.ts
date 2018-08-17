@@ -28,6 +28,25 @@ export class UserFeedComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadData()
+  }
+
+  submitChirp() {
+    this.chirpService.createChirp(this.model.text, this.username)
+      .subscribe(() => {
+        this.toastr.info("Chirp published.")
+      })
+  }
+
+  deleteChirp(id: string) {
+    this.chirpService.deleteChirp(id)
+      .subscribe(() => {
+        this.toastr.info("Chirp deleted.")
+        //this.loadData()
+      })
+  }
+
+  loadData() {
     forkJoin(
       [
         this.chirpService.loadAllChirpsByUsername(this.username),
@@ -44,13 +63,6 @@ export class UserFeedComponent implements OnInit {
         })
 
         this.chirps = chirpsArr
-      })
-  }
-
-  submitChirp() {
-    this.chirpService.createChirp(this.model.text, this.username)
-      .subscribe(() => {
-        this.toastr.info("Chirp published.")
       })
   }
 

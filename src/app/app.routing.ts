@@ -8,15 +8,23 @@ import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "./authentication/guards/auth.guard";
 import { DiscoverComponent } from "./discover/discover.component";
 import { UserFeedComponent } from "./user-feed/user-feed.component";
+import { EditChirpComponent } from "./edit-chirp/edit-chirp.component";
+import { ForeignFeedComponent } from "./foreign-feed/foreign-feed.component";
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'login' },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'logout', component: LogoutComponent },
+    
     { path: 'feed', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'discover', component: DiscoverComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: UserFeedComponent, canActivate: [AuthGuard] },
+    
+    { path: 'feed/:username', component: ForeignFeedComponent, canActivate: [AuthGuard] },
+    
+    { path: 'editChirp/:id', component: EditChirpComponent, canActivate: [AuthGuard] },
+    
     { path: '**', component: NotFoundComponent }
 ]
 

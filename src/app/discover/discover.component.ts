@@ -16,7 +16,7 @@ export class DiscoverComponent implements OnInit {
     this.userService.loadAllUsers()
       .subscribe((users) => {
         users.forEach(user => {
-          user.followers = "ne e gotovo" //users.filter(u => u.subscriptions.includes(user.username)).length
+          user.followers = users.filter(u => u.subscriptions.includes(user.username)).length
         })
 
         users = users.filter(u => u.username !== sessionStorage.getItem('username'))

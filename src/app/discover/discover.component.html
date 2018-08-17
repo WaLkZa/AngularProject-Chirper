@@ -4,7 +4,7 @@
     <div id="userlist">
       <div class="userbox" *ngFor="let u of users">
         <div>
-          <a routerLink="{{u._id}}" class="chirp-author">{{u.username}}</a>
+          <a routerLink="../feed/{{u.username}}" class="chirp-author">{{u.username}}</a>
         </div>
 
         <div class="user-details">

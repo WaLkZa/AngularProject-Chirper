@@ -1,0 +1,28 @@
+<div class="content">
+  <div class="chirper">
+
+    <h2 class="titlebar">{{username}}</h2>
+
+    <a id="btnFollow" class="chirp-author" *ngIf="!isFollowed" (click)="followUser()">Follow</a>
+    <a id="btnFollow" class="chirp-author" *ngIf="isFollowed" (click)="unfollowUser()">Unfollow</a>
+
+    <div id="userProfileStats" class="user-details">
+      <span>{{chirpsCount}} chirps</span> |
+      <span>{{following}} following</span> |
+      <span>{{followers}} followers</span>
+    </div>
+  </div>
+  <div id="profileChirps" class="chirps">
+    <h2 class="titlebar">{{username}}'s chirps</h2>
+    <article class="chirp" *ngFor="let c of chirps">
+      <div class="titlebar">
+        <a routerLink="../feed/{{username}}" class="chirp-author">{{username}}</a>
+        <span class="chirp-time">{{c.time}}</span>
+      </div>
+      <p>{{c.text}}</p>
+    </article>
+    <div class="chirp" *ngIf="!chirps?.length">
+      <span class="loading">No chirps in database</span>
+    </div>
+  </div>
+</div>

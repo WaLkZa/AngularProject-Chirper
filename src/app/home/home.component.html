@@ -18,7 +18,7 @@
     <h2 class="titlebar">Chirps from all followed users by you</h2>
     <article class="chirp" *ngFor="let c of chirps">
       <div class="titlebar">
-        <a href="#" class="chirp-author">{{c.author}}</a>
+        <a routerLink="{{c.author}}" class="chirp-author">{{c.author}}</a>
         <span class="chirp-time">{{c.time}}</span>
       </div>
       <p>{{c.text}}</p>
