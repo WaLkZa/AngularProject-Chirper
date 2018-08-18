@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-foreign-feed',
@@ -19,22 +20,24 @@ export class ForeignFeedComponent implements OnInit {
   isFollowed: boolean = false
 
   constructor(
+    private authService: AuthService,
     private chirpService: ChirpService,
     private userService: UserService,
     private toastr: ToastrService,
-    private route: ActivatedRoute, ) { }
+    private route: ActivatedRoute) {
+  }
 
   ngOnInit() {
     this.username = this.route.snapshot.params['username']
     this.isFollowed = JSON.parse(sessionStorage.getItem('subscriptions')).includes(this.username)
-    
+
     forkJoin(
       [
         this.chirpService.loadAllChirpsByUsername(this.username),
         this.userService.loadUserFollowers(this.username),
         this.userService.loadUserByUsername(this.username)
       ]
-    ).subscribe(([chirpsArr, followersArr, user]) => { 
+    ).subscribe(([chirpsArr, followersArr, user]) => {
       this.chirpsCount = chirpsArr.length
       this.following = user[0].subscriptions.length
       this.followers = followersArr.length
@@ -78,6 +81,14 @@ export class ForeignFeedComponent implements OnInit {
         sessionStorage.setItem('subscriptions', JSON.stringify(newSubArr))
 
         this.isFollowed = JSON.parse(sessionStorage.getItem('subscriptions')).includes(this.username)
+      })
+  }
+
+  deleteChirp(id: string) {
+    this.chirpService.deleteChirp(id)
+      .subscribe(() => {
+        this.toastr.info("Chirp deleted.")
+        //this.loadData()
       })
   }
 

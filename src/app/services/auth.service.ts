@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginModel } from '../authentication/models/login.model';
 import { RegisterModel } from '../authentication/models/register.model';
 
+const ADMIN_ROLE_ID = '5275abc5-fdbb-455e-ac27-a4b3e53a8ce1'
+
 const appKey = "kid_S1MVEYqMQ" // APP KEY HERE;
 const appSecret = "8546d0afc25c48a19153f0ae2c6374f7" // APP SECRET HERE;
 const registerUrl = `https://baas.kinvey.com/user/${appKey}`;
@@ -53,6 +55,10 @@ export class AuthService {
         return sessionStorage.getItem('authtoken') !== null;
     }
 
+    isAdmin() {
+        return sessionStorage.getItem('roleId') !== null;
+    }
+
     saveSession(userInfo) {
         let userAuth = userInfo._kmd.authtoken;
         sessionStorage.setItem('authtoken', userAuth);
@@ -60,6 +66,14 @@ export class AuthService {
         sessionStorage.setItem('username', username);
         sessionStorage.setItem('userId', userInfo._id);
         sessionStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
+
+        if (userInfo._kmd.roles) {
+            for (let userRole of userInfo._kmd.roles) {
+                if (userRole.roleId === ADMIN_ROLE_ID) {
+                    sessionStorage.setItem('roleId', ADMIN_ROLE_ID)
+                }
+            }
+        }
     }
 
     private createAuthHeaders(type: string) {

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-discover',
@@ -9,7 +11,9 @@ import { UserService } from '../services/user.service';
 export class DiscoverComponent implements OnInit {
   users
   constructor(
+    private authService: AuthService,
     private userService: UserService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -27,4 +31,11 @@ export class DiscoverComponent implements OnInit {
       })
   }
 
+  deleteUser(id: string) {
+    this.userService.deleteUser(id)
+      .subscribe(() => {
+        this.toastr.info("User deleted.")
+        //this.loadData()
+      })
+  }
 }

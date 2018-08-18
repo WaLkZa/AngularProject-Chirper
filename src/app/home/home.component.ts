@@ -4,6 +4,7 @@ import { forkJoin } from 'rxjs';
 import { UserService } from '../services/user.service';
 import { SubmitChirpModel } from '../models/submit-chirp.model';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
   chirps
 
   constructor(
+    private authService: AuthService,
     private chirpService: ChirpService,
     private userService: UserService,
     private toastr: ToastrService

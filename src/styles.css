@@ -194,3 +194,9 @@ footer>* {
   background: #83bef7;
   cursor: pointer;
 }
+
+.pseudolink {
+  color: blue;
+  cursor: pointer;
+  text-decoration: none;
+}

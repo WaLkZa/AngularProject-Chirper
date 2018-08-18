@@ -54,7 +54,7 @@ export class UserService {
             })
         } else if (type === "Master") {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${btoa(appKey + ':' + masterSecret)}`,
+                'Authorization': `Basic ${btoa(`${appKey}:${masterSecret}`)}`,
                 'Content-Type': 'application/json'
             })
         }

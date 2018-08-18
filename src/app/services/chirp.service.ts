@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 const appKey = "kid_S1MVEYqMQ"
 const appSecret = "8546d0afc25c48a19153f0ae2c6374f7"
@@ -9,7 +10,8 @@ const baseUrl = `https://baas.kinvey.com/appdata/${appKey}/`
 @Injectable()
 export class ChirpService {
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+        private authService: AuthService) {
     }
 
     loadFollowersChirps(subs) {
@@ -46,8 +48,11 @@ export class ChirpService {
     }
 
     deleteChirp(chirpId) {
-        //return requester.remove('appdata', `chirps/${chirpId}`, authService.isAdmin() ? 'master' : 'kinvey')
-        return this.http.delete(baseUrl + `chirps/${chirpId}`, { headers: this.createAuthHeaders("Kinvey") })
+        console.log(this.createAuthHeaders("Master"))
+        return this.http.delete(baseUrl + `chirps/${chirpId}`,
+            { headers: this.createAuthHeaders(this.authService.isAdmin() ? "Master" : "Kinvey") }
+        )
+
     }
 
     editChirp(chirpId, author, text) {
@@ -56,8 +61,9 @@ export class ChirpService {
             text: text
         }
 
-        //return requester.update('appdata', `chirps/${chirpId}`, authService.isAdmin() ? 'master' : 'kinvey', newData)
-        return this.http.put(baseUrl + `chirps/${chirpId}`, JSON.stringify(newData), { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.put(baseUrl + `chirps/${chirpId}`, JSON.stringify(newData),
+            { headers: this.createAuthHeaders(this.authService.isAdmin() ? "Master" : "Kinvey") }
+        )
     }
 
     private createAuthHeaders(type: string) {
@@ -73,7 +79,7 @@ export class ChirpService {
             })
         } else if (type === "Master") {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${btoa(appKey + ':' + masterSecret)}`,
+                'Authorization': `Basic ${btoa(`${appKey}:${masterSecret}`)}`,
                 'Content-Type': 'application/json'
             })
         }
