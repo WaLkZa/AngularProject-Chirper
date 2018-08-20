@@ -4,9 +4,17 @@
     <h2 class="titlebar">{{username}}</h2>
 
     <form id="formSubmitChirp" class="chirp-form" #formSubmitChirp="ngForm" (ngSubmit)="submitChirp()">
-      <textarea name="text" class="chirp-input" required [(ngModel)]="model.text" #text="ngModel"></textarea>
-      <input class="chirp-submit" id="btnSubmitChirp" value="Chirp" type="submit">
+      <textarea name="text" class="chirp-input" required minlength="5" maxlength="150" [(ngModel)]="model.text" #text="ngModel"></textarea>
+      <input class="chirp-submit" id="btnSubmitChirp" [disabled]="formSubmitChirp.form.invalid" value="Publish" type="submit">
     </form>
+
+    <div style="color:red" *ngIf="model.text?.length == 150">
+      Chirp text cannot be longer than 150 characters!
+    </div>
+
+    <div style="color:red" *ngIf="model.text?.length < 5">
+      Chirp text must be at least 5 symbols long!
+    </div>
 
     <div id="myStats" class="user-details">
       <span>{{chirpsCount}} chirps</span> |
