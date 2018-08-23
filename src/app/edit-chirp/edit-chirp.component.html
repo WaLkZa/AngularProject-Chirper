@@ -7,11 +7,11 @@
       <input class="chirp-submit" id="btnSubmitChirp" [disabled]="formEditChirp.form.invalid" value="Edit" type="submit">
     </form>
 
-    <div style="color:red" *ngIf="model.text?.length == 150">
+    <div style="color:red" *ngIf="bindingModel.text?.length == 150">
       Chirp text cannot be longer than 150 characters!
     </div>
 
-    <div style="color:red" *ngIf="model.text?.length < 5">
+    <div style="color:red" *ngIf="bindingModel.text?.length < 5">
       Chirp text must be at least 5 symbols long!
     </div>
   </div>
