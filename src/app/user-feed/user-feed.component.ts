@@ -35,6 +35,7 @@ export class UserFeedComponent implements OnInit {
     this.chirpService.createChirp(this.model.text, this.username)
       .subscribe(() => {
         this.toastr.info("Chirp published.")
+        this.loadData()
       })
   }
 
@@ -42,7 +43,7 @@ export class UserFeedComponent implements OnInit {
     this.chirpService.deleteChirp(id)
       .subscribe(() => {
         this.toastr.info("Chirp deleted.")
-        //this.loadData()
+        this.loadData()
       })
   }
 

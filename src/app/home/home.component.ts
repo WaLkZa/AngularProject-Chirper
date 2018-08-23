@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ChirpService } from '../services/chirp.service';
 import { forkJoin } from 'rxjs';
 import { UserService } from '../services/user.service';
-import { SubmitChirpModel } from '../models/submit-chirp.model';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
 
@@ -12,7 +11,6 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  model: SubmitChirpModel
   username: string
   chirpsCount: number
   following: number
@@ -25,11 +23,14 @@ export class HomeComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService
   ) {
-    this.model = new SubmitChirpModel('')
     this.username = sessionStorage.getItem('username')
   }
 
   ngOnInit() {
+    this.loadData()
+  }
+
+  loadData() {
     let allFollowedChirps = []
 
     let users = JSON.parse(sessionStorage.getItem('subscriptions'))
@@ -66,10 +67,11 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  submitChirp() {
-    this.chirpService.createChirp(this.model.text, this.username)
+  deleteChirp(id: string) {
+    this.chirpService.deleteChirp(id)
       .subscribe(() => {
-        this.toastr.info("Chirp published.")
+        this.toastr.info("Chirp deleted.")
+        this.loadData()
       })
   }
 

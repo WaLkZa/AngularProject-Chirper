@@ -17,6 +17,10 @@ export class DiscoverComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loadData()
+  }
+
+  loadData() {
     this.userService.loadAllUsers()
       .subscribe((users) => {
         users.forEach(user => {
@@ -35,7 +39,7 @@ export class DiscoverComponent implements OnInit {
     this.userService.deleteUser(id)
       .subscribe(() => {
         this.toastr.info("User deleted.")
-        //this.loadData()
+        this.loadData()
       })
   }
 }
