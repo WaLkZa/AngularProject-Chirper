@@ -4,6 +4,14 @@
   <input name="username" type="text" required [(ngModel)]="model.username" #username="ngModel">
   <label>Password</label>
   <input name="password" type="password" required [(ngModel)]="model.password" #password="ngModel">
-  <input id="btnLogin" value="Sign In" type="submit">
+  <input id="btnLogin" value="Sign In" type="submit" [disabled]="loginForm.form.invalid">
   <a routerLink="/register">Register</a>
 </form>
+
+<div style="color:red; text-align: center;" [hidden]="username.valid || username.pristine">
+  Please enter a username
+</div>
+
+<div style="color:red; text-align: center;" [hidden]="password.valid || password.pristine">
+  Please enter a password
+</div>

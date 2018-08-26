@@ -2,12 +2,24 @@
 <form class="form chirps" id="formRegister" #registrationForm="ngForm" (ngSubmit)="register()">
 
   <label for="username">Username</label>
-  <input name="username" type="text" required [(ngModel)]="model.username" #username="ngModel">
+  <input name="username" type="text" required pattern="^[A-Z][A-Za-z\d]+$" [(ngModel)]="model.username" #username="ngModel">
   <label>Password</label>
-  <input name="password" type="password" required [(ngModel)]="model.password" #password="ngModel">
+  <input name="password" type="password" required pattern="^[A-Za-z\d]{4,16}$" [(ngModel)]="model.password" #password="ngModel">
   <label>Repeat Password</label>
   <input name="repeatPass" type="password" required [(ngModel)]="model.repeatPass" #repeatPass="ngModel">
 
   <input id="btnRegister" value="Register" type="submit" [disabled]="registrationForm.form.invalid">
   <a routerLink="/login">Log in</a>
 </form>
+
+<div style="color:red; text-align: center;" [hidden]="username.valid || username.pristine">
+  Username must start with a capital letter and must contain only letters and digits.
+</div>
+
+<div style="color:red; text-align: center;" [hidden]="password.valid || password.pristine">
+  Password must contain only letters and digits and must be between 4 and 16 symbols.
+</div>
+
+<div style="color:red; text-align: center;" [hidden]="password.value === repeatPass.value || repeatPass.pristine">
+  Both passwords must match.
+</div>
