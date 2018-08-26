@@ -8,12 +8,8 @@
       <input class="chirp-submit" id="btnSubmitChirp" [disabled]="formSubmitChirp.form.invalid" value="Publish" type="submit">
     </form>
 
-    <div style="color:red" *ngIf="model.text?.length == 150">
-      Chirp text cannot be longer than 150 characters!
-    </div>
-
-    <div style="color:red" *ngIf="model.text?.length < 5">
-      Chirp text must be at least 5 symbols long!
+    <div style="color:red" [hidden]="text.valid || text.pristine">
+      Chirp text must be must be between 5 and 150 symbols.
     </div>
 
     <div id="myStats" class="user-details">
