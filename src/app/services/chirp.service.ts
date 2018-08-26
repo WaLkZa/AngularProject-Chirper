@@ -74,7 +74,7 @@ export class ChirpService {
             })
         } else if (type === "Kinvey") {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${sessionStorage.getItem('authtoken')}`,
+                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         } else if (type === "Master") {

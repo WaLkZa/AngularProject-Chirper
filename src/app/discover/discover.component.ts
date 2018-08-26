@@ -27,7 +27,7 @@ export class DiscoverComponent implements OnInit {
           user.followers = users.filter(u => u.subscriptions.includes(user.username)).length
         })
 
-        users = users.filter(u => u.username !== sessionStorage.getItem('username'))
+        users = users.filter(u => u.username !== localStorage.getItem('username'))
 
         users = users.sort((a, b) => b.followers - a.followers) // sort by descending followers
 

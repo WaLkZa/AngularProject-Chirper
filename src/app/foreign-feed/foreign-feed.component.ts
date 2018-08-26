@@ -29,7 +29,7 @@ export class ForeignFeedComponent implements OnInit {
 
   ngOnInit() {
     this.username = this.route.snapshot.params['username']
-    this.isFollowed = JSON.parse(sessionStorage.getItem('subscriptions')).includes(this.username)
+    this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
 
     forkJoin(
       [
@@ -44,7 +44,7 @@ export class ForeignFeedComponent implements OnInit {
 
       chirpsArr.forEach(c => {
         c.time = this.dateConvertor(c._kmd.ect)
-        c.isAuthor = c.author === sessionStorage.getItem('username')
+        c.isAuthor = c.author === localStorage.getItem('username')
       })
 
       this.chirps = chirpsArr
@@ -52,25 +52,25 @@ export class ForeignFeedComponent implements OnInit {
   }
 
   followUser() {
-    let userId = sessionStorage.getItem('userId')
+    let userId = localStorage.getItem('userId')
 
     // Create a copy of arr
-    let newSubArr = JSON.parse(sessionStorage.getItem('subscriptions')).splice(0)
+    let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
     newSubArr.push(this.username)
 
     this.userService.modifyUser(userId, newSubArr)
       .subscribe(() => {
         this.toastr.info(`Subscribed to ${this.username}`)
 
-        sessionStorage.setItem('subscriptions', JSON.stringify(newSubArr))
+        localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
 
-        this.isFollowed = JSON.parse(sessionStorage.getItem('subscriptions')).includes(this.username)
+        this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
       })
   }
 
   unfollowUser() {
-    let userId = sessionStorage.getItem('userId')
-    let newSubArr = JSON.parse(sessionStorage.getItem('subscriptions')).splice(0)
+    let userId = localStorage.getItem('userId')
+    let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
     let indexOfEl = newSubArr.indexOf(this.username)
     newSubArr.splice(indexOfEl, 1)
 
@@ -78,9 +78,9 @@ export class ForeignFeedComponent implements OnInit {
       .subscribe(() => {
         this.toastr.info(`Unsubscribed to ${this.username}`)
 
-        sessionStorage.setItem('subscriptions', JSON.stringify(newSubArr))
+        localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
 
-        this.isFollowed = JSON.parse(sessionStorage.getItem('subscriptions')).includes(this.username)
+        this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
       })
   }
 

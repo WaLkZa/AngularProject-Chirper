@@ -20,7 +20,7 @@ export class LogoutComponent implements OnInit {
     this.authService.logout()
       .subscribe(data => {
         this.toastr.success('Logout successful.')
-        sessionStorage.clear()
+        localStorage.clear()
         this.authService.authtoken = ""
         this.router.navigate(['/login'])
       })

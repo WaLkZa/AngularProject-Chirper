@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService
   ) {
-    this.username = sessionStorage.getItem('username')
+    this.username = localStorage.getItem('username')
   }
 
   ngOnInit() {
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
   loadData() {
     let allFollowedChirps = []
 
-    let users = JSON.parse(sessionStorage.getItem('subscriptions'))
+    let users = JSON.parse(localStorage.getItem('subscriptions'))
 
     for (let user of users) {
       allFollowedChirps.push(this.chirpService.loadAllChirpsByUsername(user))
@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
       ]
     ).subscribe(([chirpsByUser, followersArr]) => {
       this.chirpsCount = (<any>chirpsByUser).length
-      this.following = JSON.parse(sessionStorage.getItem('subscriptions')).length
+      this.following = JSON.parse(localStorage.getItem('subscriptions')).length
       this.followers = (<any>followersArr).length
     }
     )

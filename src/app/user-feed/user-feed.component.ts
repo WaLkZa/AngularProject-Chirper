@@ -24,7 +24,7 @@ export class UserFeedComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.model = new SubmitChirpModel('')
-    this.username = sessionStorage.getItem('username')
+    this.username = localStorage.getItem('username')
   }
 
   ngOnInit() {
@@ -60,7 +60,7 @@ export class UserFeedComponent implements OnInit {
 
         chirpsArr.forEach(c => {
           c.time = this.dateConvertor(c._kmd.ect)
-          c.isAuthor = c.author === sessionStorage.getItem('username')
+          c.isAuthor = c.author === localStorage.getItem('username')
         })
 
         this.chirps = chirpsArr

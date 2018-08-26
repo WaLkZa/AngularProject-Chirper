@@ -51,26 +51,26 @@ export class AuthService {
     }
 
     isAuthenticated() {
-        //return this.currentAuthtoken === sessionStorage.getItem('authtoken');
-        return sessionStorage.getItem('authtoken') !== null;
+        //return this.currentAuthtoken === localStorage.getItem('authtoken');
+        return localStorage.getItem('authtoken') !== null;
     }
 
     isAdmin() {
-        return sessionStorage.getItem('roleId') !== null;
+        return localStorage.getItem('roleId') !== null;
     }
 
     saveSession(userInfo) {
         let userAuth = userInfo._kmd.authtoken;
-        sessionStorage.setItem('authtoken', userAuth);
+        localStorage.setItem('authtoken', userAuth);
         let username = userInfo.username;
-        sessionStorage.setItem('username', username);
-        sessionStorage.setItem('userId', userInfo._id);
-        sessionStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
+        localStorage.setItem('username', username);
+        localStorage.setItem('userId', userInfo._id);
+        localStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
 
         if (userInfo._kmd.roles) {
             for (let userRole of userInfo._kmd.roles) {
                 if (userRole.roleId === ADMIN_ROLE_ID) {
-                    sessionStorage.setItem('roleId', ADMIN_ROLE_ID)
+                    localStorage.setItem('roleId', ADMIN_ROLE_ID)
                 }
             }
         }
@@ -84,7 +84,7 @@ export class AuthService {
             })
         } else {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${sessionStorage.getItem('authtoken')}`,
+                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         }
