@@ -4,11 +4,11 @@
     <div id="userlist">
       <div class="userbox" *ngFor="let u of users">
         <div>
-          <a routerLink="../feed/{{u.username}}" class="chirp-author">{{u.username}}</a>
+          <a routerLink="../feed/{{u.name}}" class="chirp-author">{{u.name}}</a>
         </div>
 
         <div class="user-details">
-          <a class="pseudolink" (click)="deleteUser(u._id)" *ngIf="authService.isAdmin()">delete user </a>
+          <a class="pseudolink" (click)="deleteUser(u.id)" *ngIf="authService.isAdmin()">delete user </a>
           <span>{{u.followers}} followers</span>
         </div>
       </div>

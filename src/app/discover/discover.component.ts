@@ -22,16 +22,16 @@ export class DiscoverComponent implements OnInit {
 
   loadData() {
     this.userService.loadAllUsers()
-      .subscribe((users) => {
-        users.forEach(user => {
-          user.followers = users.filter(u => u.subscriptions.includes(user.username)).length
-        })
+      .subscribe((result) => {
+        // users.forEach(user => {
+        //   user.followers = users.filter(u => u.subscriptions.includes(user.username)).length
+        // })
 
-        users = users.filter(u => u.username !== localStorage.getItem('username'))
+        result.users = result.users.filter(u => u.name !== localStorage.getItem('username'))
 
-        users = users.sort((a, b) => b.followers - a.followers) // sort by descending followers
+        //users = users.sort((a, b) => b.followers - a.followers)
 
-        this.users = users
+        this.users = result.users
       })
   }
 

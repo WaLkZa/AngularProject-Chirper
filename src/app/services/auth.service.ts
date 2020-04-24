@@ -5,11 +5,7 @@ import { RegisterModel } from '../authentication/models/register.model';
 
 const ADMIN_ROLE_ID = '5275abc5-fdbb-455e-ac27-a4b3e53a8ce1'
 
-const appKey = "kid_S1MVEYqMQ" // APP KEY HERE;
-const appSecret = "8546d0afc25c48a19153f0ae2c6374f7" // APP SECRET HERE;
-const registerUrl = `https://baas.kinvey.com/user/${appKey}`;
-const loginUrl = `https://baas.kinvey.com/user/${appKey}/login`;
-const logoutUrl = `https://baas.kinvey.com/user/${appKey}/_logout`;
+const url = 'http://localhost:3000/api/user';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +15,7 @@ export class AuthService {
     }
 
     login(model: LoginModel) {
-        return this.http.post(loginUrl,
+        return this.http.post(url + '/login',
             JSON.stringify(model),
             {
                 headers: this.createAuthHeaders('Basic')
@@ -27,7 +23,7 @@ export class AuthService {
     }
 
     register(model: RegisterModel) {
-        return this.http.post(registerUrl,
+        return this.http.post(url + '/register',
             JSON.stringify(model),
             {
                 headers: this.createAuthHeaders('Basic')
@@ -35,7 +31,7 @@ export class AuthService {
     }
 
     logout() {
-        return this.http.post(logoutUrl,
+        return this.http.post(url,
             {},
             {
                 headers: this.createAuthHeaders('Kinvey')
@@ -60,31 +56,30 @@ export class AuthService {
     }
 
     saveSession(userInfo) {
-        let userAuth = userInfo._kmd.authtoken;
+        let userAuth = userInfo.token;
         localStorage.setItem('authtoken', userAuth);
         let username = userInfo.username;
         localStorage.setItem('username', username);
-        localStorage.setItem('userId', userInfo._id);
-        localStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
+        localStorage.setItem('userId', userInfo.userId);
+        //localStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
 
-        if (userInfo._kmd.roles) {
-            for (let userRole of userInfo._kmd.roles) {
-                if (userRole.roleId === ADMIN_ROLE_ID) {
-                    localStorage.setItem('roleId', ADMIN_ROLE_ID)
-                }
-            }
-        }
+        // if (userInfo._kmd.roles) {
+        //     for (let userRole of userInfo._kmd.roles) {
+        //         if (userRole.roleId === ADMIN_ROLE_ID) {
+        //             localStorage.setItem('roleId', ADMIN_ROLE_ID)
+        //         }
+        //     }
+        // }
     }
 
     private createAuthHeaders(type: string) {
         if (type === "Basic") {
             return new HttpHeaders({
-                'Authorization': `Basic ${btoa(`${appKey}:${appSecret}`)}`,
                 'Content-Type': 'application/json'
             })
         } else {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
+                'Authorization': `Bearer ${localStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         }

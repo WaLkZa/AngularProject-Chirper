@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-const appKey = "kid_S1MVEYqMQ"
-const appSecret = "8546d0afc25c48a19153f0ae2c6374f7"
-const masterSecret = "ea1698304ab4454ea94217e7c7523d6e"
-const baseUrl = `https://baas.kinvey.com/user/${appKey}/`
+const url = 'http://localhost:3000/api/user';
 
 @Injectable()
 export class UserService {
@@ -15,17 +12,17 @@ export class UserService {
     loadUserByUsername(username: string) {
         let endpoint = `?query={"username":"${username}"}`
 
-        return this.http.get(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get(url + endpoint, { headers: this.createAuthHeaders("Kinvey") })
     }
 
     loadUserFollowers(username: string) {
         let endpoint = `?query={"subscriptions":"${username}"}`
 
-        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(url + endpoint, { headers: this.createAuthHeaders("Kinvey") })
     }
 
     loadAllUsers() {
-        return this.http.get<any>(baseUrl, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(url + '/all', { headers: this.createAuthHeaders("Kinvey") })
     }
 
     modifyUser(userId, newSubs) {
@@ -34,27 +31,21 @@ export class UserService {
         }
 
         //return requester.update('user', userId, 'kinvey', newUser)
-        return this.http.put(baseUrl + userId, JSON.stringify(newUser), { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.put(url + userId, JSON.stringify(newUser), { headers: this.createAuthHeaders("Kinvey") })
     }
 
     deleteUser(userId) {
-        return this.http.delete(baseUrl + `${userId}?hard=true`, { headers: this.createAuthHeaders("Master") })
+        return this.http.delete(url + `${userId}?hard=true`, { headers: this.createAuthHeaders("Master") })
     }
 
     private createAuthHeaders(type: string) {
         if (type === "Basic") {
             return new HttpHeaders({
-                'Authorization': `Basic ${btoa(`${appKey}:${appSecret}`)}`,
                 'Content-Type': 'application/json'
             })
-        } else if (type === "Kinvey") {
+        } else {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
-                'Content-Type': 'application/json'
-            })
-        } else if (type === "Master") {
-            return new HttpHeaders({
-                'Authorization': `Basic ${btoa(`${appKey}:${masterSecret}`)}`,
+                'Authorization': `Bearer ${localStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         }
