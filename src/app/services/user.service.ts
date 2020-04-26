@@ -22,7 +22,7 @@ export class UserService {
     }
 
     loadAllUsers() {
-        return this.http.get<any>(url + '/all', { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(url + '/all', { headers: this.createAuthHeaders("Bearer") })
     }
 
     modifyUser(userId, newSubs) {

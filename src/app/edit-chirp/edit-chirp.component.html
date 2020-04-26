@@ -1,9 +1,9 @@
 <div class="content">
   <div class="chirper">
-    <h2 class="titlebar">{{bindingModel.author}}</h2>
+    <h2 class="titlebar">{{authorName}}</h2>
     <form id="formSubmitChirp" class="chirp-form" #formEditChirp="ngForm" (ngSubmit)="editChirp()">
-      <textarea name="text" class="chirp-input" required minlength="5" maxlength="150" [(ngModel)]="bindingModel.text" #text="ngModel"
-        value="{{bindingModel.text}}"></textarea>
+      <textarea name="text" class="chirp-input" required minlength="5" maxlength="150" [(ngModel)]="bindingModel.content" #text="ngModel"
+        value="{{bindingModel.content}}"></textarea>
       <input class="chirp-submit" id="btnSubmitChirp" [disabled]="formEditChirp.form.invalid" value="Edit" type="submit">
     </form>
 

@@ -31,40 +31,51 @@ export class HomeComponent implements OnInit {
   }
 
   loadData() {
-    let allFollowedChirps = []
+    this.chirpService
+      .loadAllChirps()
+      .subscribe(result => {
+        
+        result.chirps.forEach(c => {
+          c.time = this.dateConvertor(c.dateCreated);
+        })
 
-    let users = JSON.parse(localStorage.getItem('subscriptions'))
-
-    for (let user of users) {
-      allFollowedChirps.push(this.chirpService.loadAllChirpsByUsername(user))
-    }
-
-    forkJoin(allFollowedChirps)
-      .subscribe(arr => {
-        if (arr.length > 0) {
-          let allChirpsInOneArray = arr.reduce((result, current) => {
-            return result.concat(current)
-          })
-
-          allChirpsInOneArray.forEach(c => {
-            c.time = this.dateConvertor(c._kmd.ect)
-          })
-
-          this.chirps = allChirpsInOneArray
-        }
+        this.chirps = result.chirps;
       })
 
-    forkJoin(
-      [
-        this.chirpService.loadAllChirpsByUsername(this.username),
-        this.userService.loadUserFollowers(this.username)
-      ]
-    ).subscribe(([chirpsByUser, followersArr]) => {
-      this.chirpsCount = (<any>chirpsByUser).length
-      this.following = JSON.parse(localStorage.getItem('subscriptions')).length
-      this.followers = (<any>followersArr).length
-    }
-    )
+    // let allFollowedChirps = []
+
+    // let users = JSON.parse(localStorage.getItem('subscriptions'))
+
+    // for (let user of users) {
+    //   allFollowedChirps.push(this.chirpService.loadAllChirpsByUsername(user))
+    // }
+
+    // forkJoin(allFollowedChirps)
+    //   .subscribe(arr => {
+    //     if (arr.length > 0) {
+    //       let allChirpsInOneArray = arr.reduce((result, current) => {
+    //         return result.concat(current)
+    //       })
+
+    //       allChirpsInOneArray.forEach(c => {
+    //         c.time = this.dateConvertor(c._kmd.ect)
+    //       })
+
+    //       this.chirps = allChirpsInOneArray
+    //     }
+    //   })
+
+    // forkJoin(
+    //   [
+    //     this.chirpService.loadAllChirpsByUsername(this.username),
+    //     this.userService.loadUserFollowers(this.username)
+    //   ]
+    // ).subscribe(([chirpsByUser, followersArr]) => {
+    //   this.chirpsCount = (<any>chirpsByUser).length
+    //   this.following = JSON.parse(localStorage.getItem('subscriptions')).length
+    //   this.followers = (<any>followersArr).length
+    // }
+    // )
   }
 
   deleteChirp(id: string) {

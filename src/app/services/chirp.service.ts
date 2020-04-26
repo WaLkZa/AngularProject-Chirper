@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 
-const appKey = "kid_S1MVEYqMQ"
-const appSecret = "8546d0afc25c48a19153f0ae2c6374f7"
-const masterSecret = "ea1698304ab4454ea94217e7c7523d6e"
-const baseUrl = `https://baas.kinvey.com/appdata/${appKey}/`
+const url = 'http://localhost:3000/api/chirp';
 
 @Injectable()
 export class ChirpService {
@@ -17,69 +14,51 @@ export class ChirpService {
     loadFollowersChirps(subs) {
         let endpoint = `chirps?query={"author":{"$in": [${subs}]}}&sort={"_kmd.ect": -1}`
 
-        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(url + endpoint, { headers: this.createAuthHeaders("Bearer") })
     }
 
-    loadAllChirpsByUsername(username: string) {
-        let endpoint: string = `chirps?query={"author":"${username}"}&sort={"_kmd.ect": -1}`
+    loadAllChirpsByUserID(userId: number) {
 
-        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(url + `/all/${userId}`, { headers: this.createAuthHeaders("Bearer") })
     }
 
     loadChirpById(chirpId) {
-        let endpoint = `chirps?query={"_id":"${chirpId}"}`
-
-        return this.http.get<any>(baseUrl + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.get<any>(url + `/${chirpId}`, { headers: this.createAuthHeaders("Bearer") })
     }
 
     loadAllChirps() {
-        let endpoint = `chirps?query={}&sort={"_kmd.ect": -1}`
-
-        return this.http.get(baseUrl + endpoint, { headers: this.createAuthHeaders("Master") })
+        return this.http.get<any>(url + '/all', { headers: this.createAuthHeaders("Basic") })
     }
 
-    createChirp(text, author) {
+    createChirp(userId, content) {
         let chirpData = {
-            text,
-            author
+            userId,
+            content
         }
 
-        return this.http.post(baseUrl + 'chirps', JSON.stringify(chirpData), { headers: this.createAuthHeaders("Kinvey") })
+        return this.http.post(url + '/create', JSON.stringify(chirpData), { headers: this.createAuthHeaders("Bearer") })
     }
 
     deleteChirp(chirpId) {
-        console.log(this.createAuthHeaders("Master"))
-        return this.http.delete(baseUrl + `chirps/${chirpId}`,
-            { headers: this.createAuthHeaders(this.authService.isAdmin() ? "Master" : "Kinvey") }
-        )
-
+        return this.http.delete(url + `/delete/${chirpId}`, { headers: this.createAuthHeaders("Bearer") })
     }
 
-    editChirp(chirpId, author, text) {
+    editChirp(chirpId, content) {
         let newData = {
-            author: author,
-            text: text
+            content: content
         }
 
-        return this.http.put(baseUrl + `chirps/${chirpId}`, JSON.stringify(newData),
-            { headers: this.createAuthHeaders(this.authService.isAdmin() ? "Master" : "Kinvey") }
-        )
+        return this.http.put(url + `/edit/${chirpId}`, JSON.stringify(newData), { headers: this.createAuthHeaders("Bearer") })
     }
 
     private createAuthHeaders(type: string) {
         if (type === "Basic") {
             return new HttpHeaders({
-                'Authorization': `Basic ${btoa(`${appKey}:${appSecret}`)}`,
                 'Content-Type': 'application/json'
             })
-        } else if (type === "Kinvey") {
+        } else {
             return new HttpHeaders({
-                'Authorization': `Kinvey ${localStorage.getItem('authtoken')}`,
-                'Content-Type': 'application/json'
-            })
-        } else if (type === "Master") {
-            return new HttpHeaders({
-                'Authorization': `Basic ${btoa(`${appKey}:${masterSecret}`)}`,
+                'Authorization': `Bearer ${localStorage.getItem('authtoken')}`,
                 'Content-Type': 'application/json'
             })
         }

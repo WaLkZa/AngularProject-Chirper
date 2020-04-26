@@ -22,13 +22,13 @@
     <h2 class="titlebar">My Chirps</h2>
     <article class="chirp" *ngFor="let c of chirps">
       <div class="titlebar">
-        <a routerLink="/feed/{{username}}" class="chirp-author">{{c.author}}</a>
+        <a routerLink="/feed/{{username}}" class="chirp-author">{{c.user.name}}</a>
         <span class="chirp-time">
-          <a routerLink="/editChirp/{{c._id}}">edit </a>
-          <a class="pseudolink" (click)="deleteChirp(c._id)">delete </a> {{c.time}}
+          <a routerLink="/editChirp/{{c.id}}">edit </a>
+          <a class="pseudolink" (click)="deleteChirp(c.id)">delete </a> {{c.time}}
         </span>
       </div>
-      <p>{{c.text}}</p>
+      <p>{{c.content}}</p>
     </article>
     <div class="chirp" *ngIf="!chirps?.length">
       <span class="loading">No chirps in database</span>

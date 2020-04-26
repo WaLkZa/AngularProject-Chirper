@@ -11,26 +11,28 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class EditChirpComponent implements OnInit {
   bindingModel: EditChirpModel
+  authorName: string
 
   constructor(
     private chirpService: ChirpService,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService) {
-    this.bindingModel = new EditChirpModel('', '', '')
+    this.bindingModel = new EditChirpModel('', '')
   }
 
   ngOnInit() {
     let chirpId = this.route.snapshot.params['id']
 
     this.chirpService.loadChirpById(chirpId)
-      .subscribe(data => {
-        this.bindingModel = data[0]
+      .subscribe(result => {
+        this.bindingModel = result.chirp;
+        this.authorName = result.chirp.user.name
       })
   }
 
   editChirp() {
-    this.chirpService.editChirp(this.bindingModel._id, this.bindingModel.author, this.bindingModel.text)
+    this.chirpService.editChirp(this.bindingModel.id, this.bindingModel.content)
       .subscribe(() => {
         this.toastr.info("Chirp edited")
       })

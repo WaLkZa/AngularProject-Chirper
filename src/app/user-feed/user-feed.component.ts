@@ -13,6 +13,7 @@ import { SubmitChirpModel } from '../models/submit-chirp.model';
 export class UserFeedComponent implements OnInit {
   model: SubmitChirpModel
   username: string
+  userId: number
   chirpsCount: number
   following: number
   followers: number
@@ -25,6 +26,7 @@ export class UserFeedComponent implements OnInit {
   ) {
     this.model = new SubmitChirpModel('')
     this.username = localStorage.getItem('username')
+    this.userId = +localStorage.getItem('userId')
   }
 
   ngOnInit() {
@@ -32,7 +34,7 @@ export class UserFeedComponent implements OnInit {
   }
 
   submitChirp() {
-    this.chirpService.createChirp(this.model.text, this.username)
+    this.chirpService.createChirp(this.userId, this.model.text)
       .subscribe(() => {
         this.toastr.info("Chirp published.")
         this.loadData()
@@ -40,7 +42,7 @@ export class UserFeedComponent implements OnInit {
   }
 
   deleteChirp(id: string) {
-    this.chirpService.deleteChirp(id)
+    this.chirpService.deleteChirp(+id)
       .subscribe(() => {
         this.toastr.info("Chirp deleted.")
         this.loadData()
@@ -48,23 +50,34 @@ export class UserFeedComponent implements OnInit {
   }
 
   loadData() {
-    forkJoin(
-      [
-        this.chirpService.loadAllChirpsByUsername(this.username),
-        this.userService.loadUserFollowers(this.username),
-        this.userService.loadUserByUsername(this.username)
-      ]).subscribe(([chirpsArr, followersArr, user]) => {
-        this.chirpsCount = chirpsArr.length
-        this.following = user[0].subscriptions.length
-        this.followers = followersArr.length
-
-        chirpsArr.forEach(c => {
-          c.time = this.dateConvertor(c._kmd.ect)
+    this.chirpService
+      .loadAllChirpsByUserID(this.userId)
+      .subscribe(result => {
+        
+        result.chirps.forEach(c => {
+          c.time = this.dateConvertor(c.dateCreated)
           c.isAuthor = c.author === localStorage.getItem('username')
         })
 
-        this.chirps = chirpsArr
+        this.chirps = result.chirps
       })
+    // forkJoin(
+    //   [
+    //     this.chirpService.loadAllChirpsByUsername(this.username),
+    //     this.userService.loadUserFollowers(this.username),
+    //     this.userService.loadUserByUsername(this.username)
+    //   ]).subscribe(([chirpsArr, followersArr, user]) => {
+    //     this.chirpsCount = chirpsArr.length
+    //     this.following = user[0].subscriptions.length
+    //     this.followers = followersArr.length
+
+    //     chirpsArr.forEach(c => {
+    //       c.time = this.dateConvertor(c._kmd.ect)
+    //       c.isAuthor = c.author === localStorage.getItem('username')
+    //     })
+
+    //     this.chirps = chirpsArr
+    //   })
   }
 
   dateConvertor(dateIsoFormat) {

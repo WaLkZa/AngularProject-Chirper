@@ -5,11 +5,11 @@
       <div class="titlebar">
         <a routerLink="{{c.author}}" class="chirp-author">{{c.author}}</a>
         <span class="chirp-time">
-          <a routerLink="/editChirp/{{c._id}}" *ngIf="authService.isAdmin()">edit </a>
-          <a class="pseudolink" (click)="deleteChirp(c._id)" *ngIf="authService.isAdmin()">delete </a> {{c.time}}
+          <a routerLink="/editChirp/{{c.id}}" *ngIf="authService.isAdmin()">edit </a>
+          <a class="pseudolink" (click)="deleteChirp(c.id)" *ngIf="authService.isAdmin()">delete </a> {{c.time}}
         </span>
       </div>
-      <p>{{c.text}}</p>
+      <p>{{c.content}}</p>
     </article>
   </div>
 </div>
