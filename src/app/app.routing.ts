@@ -21,7 +21,7 @@ const routes: Routes = [
     { path: 'discover', component: DiscoverComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: UserFeedComponent, canActivate: [AuthGuard] },
     
-    { path: 'feed/:username', component: ForeignFeedComponent, canActivate: [AuthGuard] },
+    { path: 'feed/:id', component: ForeignFeedComponent, canActivate: [AuthGuard] },
     
     { path: 'editChirp/:id', component: EditChirpComponent, canActivate: [AuthGuard] },
     

@@ -3,7 +3,7 @@
     <h2 class="titlebar">Chirps from all followed users</h2>
     <article class="chirp" *ngFor="let c of chirps">
       <div class="titlebar">
-        <a routerLink="{{c.author}}" class="chirp-author">{{c.author}}</a>
+        <a routerLink="{{c.user.id}}" class="chirp-author">{{c.user.name}}</a>
         <span class="chirp-time">
           <a routerLink="/editChirp/{{c.id}}" *ngIf="authService.isAdmin()">edit </a>
           <a class="pseudolink" (click)="deleteChirp(c.id)" *ngIf="authService.isAdmin()">delete </a> {{c.time}}

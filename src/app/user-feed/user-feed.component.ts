@@ -53,13 +53,16 @@ export class UserFeedComponent implements OnInit {
     this.chirpService
       .loadAllChirpsByUserID(this.userId)
       .subscribe(result => {
+        let chirps = result.chirps;
         
-        result.chirps.forEach(c => {
+        this.chirpsCount = chirps.length
+        
+        chirps.forEach(c => {
           c.time = this.dateConvertor(c.dateCreated)
           c.isAuthor = c.author === localStorage.getItem('username')
         })
 
-        this.chirps = result.chirps
+        this.chirps = chirps
       })
     // forkJoin(
     //   [

@@ -12,12 +12,12 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./foreign-feed.component.css']
 })
 export class ForeignFeedComponent implements OnInit {
-  username: string
+  foreignUserId: number
   chirpsCount: number
   following: number
   followers: number
-  chirps
   isFollowed: boolean = false
+  user //https://stackoverflow.com/questions/39755336/angular2-cannot-read-property-name-of-undefined
 
   constructor(
     private authService: AuthService,
@@ -28,60 +28,74 @@ export class ForeignFeedComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.username = this.route.snapshot.params['username']
-    this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
+    this.foreignUserId = this.route.snapshot.params['id'];
+    // this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
+    
+    this.userService
+      .loadUserById(this.foreignUserId)
+      .subscribe(result => {
+        let chirps = result.user.chirps;
+        
+        this.chirpsCount = chirps.length
 
-    forkJoin(
-      [
-        this.chirpService.loadAllChirpsByUsername(this.username),
-        this.userService.loadUserFollowers(this.username),
-        this.userService.loadUserByUsername(this.username)
-      ]
-    ).subscribe(([chirpsArr, followersArr, user]) => {
-      this.chirpsCount = chirpsArr.length
-      this.following = user[0].subscriptions.length
-      this.followers = followersArr.length
+        chirps.forEach(c => {
+          c.time = this.dateConvertor(c.dateCreated);
+        })
 
-      chirpsArr.forEach(c => {
-        c.time = this.dateConvertor(c._kmd.ect)
-        c.isAuthor = c.author === localStorage.getItem('username')
+        this.user = result.user;
       })
 
-      this.chirps = chirpsArr
-    })
+    // forkJoin(
+    //   [
+    //     this.chirpService.loadAllChirpsByUsername(this.username),
+    //     this.userService.loadUserFollowers(this.username),
+    //     this.userService.loadUserByUsername(this.username)
+    //   ]
+    // ).subscribe(([chirpsArr, followersArr, user]) => {
+    //   this.chirpsCount = chirpsArr.length
+    //   this.following = user[0].subscriptions.length
+    //   this.followers = followersArr.length
+
+    //   chirpsArr.forEach(c => {
+    //     c.time = this.dateConvertor(c._kmd.ect)
+    //     c.isAuthor = c.author === localStorage.getItem('username')
+    //   })
+
+    //   this.chirps = chirpsArr
+    // })
   }
 
   followUser() {
-    let userId = localStorage.getItem('userId')
+    // let userId = localStorage.getItem('userId')
 
-    // Create a copy of arr
-    let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
-    newSubArr.push(this.username)
+    // // Create a copy of arr
+    // let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
+    // newSubArr.push(this.username)
 
-    this.userService.modifyUser(userId, newSubArr)
-      .subscribe(() => {
-        this.toastr.info(`Subscribed to ${this.username}`)
+    // this.userService.modifyUser(userId, newSubArr)
+    //   .subscribe(() => {
+    //     this.toastr.info(`Subscribed to ${this.username}`)
 
-        localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
+    //     localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
 
-        this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
-      })
+    //     this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
+    //   })
   }
 
   unfollowUser() {
-    let userId = localStorage.getItem('userId')
-    let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
-    let indexOfEl = newSubArr.indexOf(this.username)
-    newSubArr.splice(indexOfEl, 1)
+    // let userId = localStorage.getItem('userId')
+    // let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
+    // let indexOfEl = newSubArr.indexOf(this.username)
+    // newSubArr.splice(indexOfEl, 1)
 
-    this.userService.modifyUser(userId, newSubArr)
-      .subscribe(() => {
-        this.toastr.info(`Unsubscribed to ${this.username}`)
+    // this.userService.modifyUser(userId, newSubArr)
+    //   .subscribe(() => {
+    //     this.toastr.info(`Unsubscribed to ${this.username}`)
 
-        localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
+    //     localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
 
-        this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
-      })
+    //     this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
+    //   })
   }
 
   deleteChirp(id: string) {

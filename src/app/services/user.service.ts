@@ -9,10 +9,8 @@ export class UserService {
     constructor(private http: HttpClient) {
     }
 
-    loadUserByUsername(username: string) {
-        let endpoint = `?query={"username":"${username}"}`
-
-        return this.http.get(url + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+    loadUserById(userId: number) {
+        return this.http.get<any>(url + `/${userId}`, { headers: this.createAuthHeaders("Basic") })
     }
 
     loadUserFollowers(username: string) {

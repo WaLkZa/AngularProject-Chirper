@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
         })
 
         this.chirps = result.chirps;
+        console.log(this.chirps)
       })
 
     // let allFollowedChirps = []

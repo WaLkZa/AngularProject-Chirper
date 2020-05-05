@@ -1,7 +1,7 @@
 <div class="content">
   <div class="chirper">
 
-    <h2 class="titlebar">{{username}}</h2>
+    <h2 class="titlebar">{{user?.name}}</h2>
 
     <a id="btnFollow" class="chirp-author" *ngIf="!isFollowed" (click)="followUser()">Follow</a>
     <a id="btnFollow" class="chirp-author" *ngIf="isFollowed" (click)="unfollowUser()">Unfollow</a>
@@ -13,18 +13,18 @@
     </div>
   </div>
   <div id="profileChirps" class="chirps">
-    <h2 class="titlebar">{{username}}'s chirps</h2>
-    <article class="chirp" *ngFor="let c of chirps">
+    <h2 class="titlebar">{{user?.name}}'s chirps</h2>
+    <article class="chirp" *ngFor="let c of user?.chirps">
       <div class="titlebar">
-        <a routerLink="../feed/{{username}}" class="chirp-author">{{username}}</a>
+        <a routerLink="../feed/{{username}}" class="chirp-author">{{user?.name}}</a>
         <span class="chirp-time">
           <a routerLink="/editChirp/{{c._id}}" *ngIf="authService.isAdmin()">edit </a>
           <a class="pseudolink" (click)="deleteChirp(c._id)" *ngIf="authService.isAdmin()">delete </a> {{c.time}}
         </span>
       </div>
-      <p>{{c.text}}</p>
+      <p>{{c.content}}</p>
     </article>
-    <div class="chirp" *ngIf="!chirps?.length">
+    <div class="chirp" *ngIf="!user?.chirps.length">
       <span class="loading">No chirps in database</span>
     </div>
   </div>
