@@ -12,6 +12,7 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./foreign-feed.component.css']
 })
 export class ForeignFeedComponent implements OnInit {
+  isLoading: boolean = true
   foreignUserId: number
   chirpsCount: number
   following: number
@@ -29,73 +30,52 @@ export class ForeignFeedComponent implements OnInit {
 
   ngOnInit() {
     this.foreignUserId = this.route.snapshot.params['id'];
-    // this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
-    
-    this.userService
-      .loadUserById(this.foreignUserId)
-      .subscribe(result => {
-        let chirps = result.user.chirps;
+
+    forkJoin(
+    [
+      this.userService.isUserFollowed(this.foreignUserId),
+      this.userService.loadUserById(this.foreignUserId),
+      this.userService.loadUserStats(this.foreignUserId)
+      ])
+      .subscribe(([resultIsFollowed, resultUser, resultStats]) => {
+        this.isFollowed = Boolean(resultIsFollowed.isFollowed);
         
-        this.chirpsCount = chirps.length
+        let chirps = resultUser.user.chirps;
+
+        this.following = resultStats.stats[0].followingCount;
+        this.followers = resultStats.stats[0].followersCount;
+        this.chirpsCount = chirps.length;
 
         chirps.forEach(c => {
           c.time = this.dateConvertor(c.dateCreated);
         })
 
-        this.user = result.user;
-      })
-
-    // forkJoin(
-    //   [
-    //     this.chirpService.loadAllChirpsByUsername(this.username),
-    //     this.userService.loadUserFollowers(this.username),
-    //     this.userService.loadUserByUsername(this.username)
-    //   ]
-    // ).subscribe(([chirpsArr, followersArr, user]) => {
-    //   this.chirpsCount = chirpsArr.length
-    //   this.following = user[0].subscriptions.length
-    //   this.followers = followersArr.length
-
-    //   chirpsArr.forEach(c => {
-    //     c.time = this.dateConvertor(c._kmd.ect)
-    //     c.isAuthor = c.author === localStorage.getItem('username')
-    //   })
-
-    //   this.chirps = chirpsArr
-    // })
+        this.user = resultUser.user;
+        this.isLoading = false;
+    })
   }
 
   followUser() {
-    // let userId = localStorage.getItem('userId')
-
-    // // Create a copy of arr
-    // let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
-    // newSubArr.push(this.username)
-
-    // this.userService.modifyUser(userId, newSubArr)
-    //   .subscribe(() => {
-    //     this.toastr.info(`Subscribed to ${this.username}`)
-
-    //     localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
-
-    //     this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
-    //   })
+    this.followUnfollowAction(true);
   }
-
   unfollowUser() {
-    // let userId = localStorage.getItem('userId')
-    // let newSubArr = JSON.parse(localStorage.getItem('subscriptions')).splice(0)
-    // let indexOfEl = newSubArr.indexOf(this.username)
-    // newSubArr.splice(indexOfEl, 1)
+    this.followUnfollowAction(false);
+  }
+  
+  private followUnfollowAction(isFollowActionTriggered: boolean) {
+    this.userService
+      .followUser(this.foreignUserId)
+      .subscribe(result => {
+        this.toastr.info(result.message);
+        
+        this.isFollowed = !this.isFollowed;
 
-    // this.userService.modifyUser(userId, newSubArr)
-    //   .subscribe(() => {
-    //     this.toastr.info(`Unsubscribed to ${this.username}`)
-
-    //     localStorage.setItem('subscriptions', JSON.stringify(newSubArr))
-
-    //     this.isFollowed = JSON.parse(localStorage.getItem('subscriptions')).includes(this.username)
-    //   })
+        if (isFollowActionTriggered) {
+          this.followers++;
+        } else {
+          this.followers--;
+        }
+      })
   }
 
   deleteChirp(id: string) {

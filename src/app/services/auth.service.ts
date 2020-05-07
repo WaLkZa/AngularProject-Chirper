@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+//import { JwtHelperService } from "@auth0/angular-jwt";
 import { LoginModel } from '../authentication/models/login.model';
 import { RegisterModel } from '../authentication/models/register.model';
 
@@ -10,6 +11,7 @@ const url = 'http://localhost:3000/api/user';
 @Injectable()
 export class AuthService {
     private currentAuthtoken: string
+//    helper = new JwtHelperService();
 
     constructor(private http: HttpClient) {
     }
@@ -47,7 +49,6 @@ export class AuthService {
     }
 
     isAuthenticated() {
-        //return this.currentAuthtoken === localStorage.getItem('authtoken');
         return localStorage.getItem('authtoken') !== null;
     }
 

@@ -1,5 +1,6 @@
 <div class="content">
-  <div class="chirper">
+  <div class="lds-dual-ring" *ngIf="isLoading"></div>
+  <div class="chirper" *ngIf="!isLoading">
 
     <h2 class="titlebar">{{user?.name}}</h2>
 
@@ -12,7 +13,7 @@
       <span>{{followers}} followers</span>
     </div>
   </div>
-  <div id="profileChirps" class="chirps">
+  <div id="profileChirps" class="chirps" *ngIf="!isLoading">
     <h2 class="titlebar">{{user?.name}}'s chirps</h2>
     <article class="chirp" *ngFor="let c of user?.chirps">
       <div class="titlebar">

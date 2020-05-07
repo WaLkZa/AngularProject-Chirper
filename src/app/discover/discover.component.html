@@ -2,14 +2,16 @@
   <div class="chirps">
     <h2 class="titlebar">Discover</h2>
     <div id="userlist">
-      <div class="userbox" *ngFor="let u of users">
-        <div>
-          <a routerLink="../feed/{{u.id}}" class="chirp-author">{{u.name}}</a>
-        </div>
-
-        <div class="user-details">
-          <a class="pseudolink" (click)="deleteUser(u.id)" *ngIf="authService.isAdmin()">delete user </a>
-          <span>{{u.followers}} followers</span>
+      <div class="lds-dual-ring" *ngIf="isLoading"></div>
+      <div *ngIf="!isLoading">
+        <div class="userbox" *ngFor="let u of users">
+          <div>
+            <a routerLink="../feed/{{u.id}}" class="chirp-author">{{u.name}}</a>
+          </div>
+          <div class="user-details">
+            <a class="pseudolink" (click)="deleteUser(u.id)" *ngIf="authService.isAdmin()">delete user </a>
+            <!-- <span>{{u.followers}} followers</span> -->
+          </div>
         </div>
       </div>
     </div>

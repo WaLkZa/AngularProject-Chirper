@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class DiscoverComponent implements OnInit {
   users
+  isLoading: boolean = true
+  
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -32,6 +34,7 @@ export class DiscoverComponent implements OnInit {
         //users = users.sort((a, b) => b.followers - a.followers)
 
         this.users = result.users
+        this.isLoading = false;
       })
   }
 

@@ -156,6 +156,7 @@ footer>* {
 
 #btnFollow:hover {
   background: #83bef7;
+  cursor: pointer;
 }
 
 #btnUnfollow {
@@ -168,6 +169,7 @@ footer>* {
 
 #btnUnfollow:hover {
   background: #f79c97;
+  cursor: pointer;
 }
 
 .form {
@@ -201,4 +203,32 @@ footer>* {
   color: blue;
   cursor: pointer;
   text-decoration: none;
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #2d71c0;
+  border-color: #2d71c0 transparent #2d71c0 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

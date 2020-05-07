@@ -1,17 +1,15 @@
 <div class="content">
-  <div class="chirper">
-
+  <div class="chirper" *ngIf="!isLoading">
     <h2 class="titlebar">{{username}}</h2>
-
     <form id="formSubmitChirp" class="chirp-form" #formSubmitChirp="ngForm" (ngSubmit)="submitChirp()">
-      <textarea name="text" class="chirp-input" required minlength="5" maxlength="150" [(ngModel)]="model.text" #text="ngModel"></textarea>
-      <input class="chirp-submit" id="btnSubmitChirp" [disabled]="formSubmitChirp.form.invalid" value="Publish" type="submit">
+      <textarea name="text" class="chirp-input" required minlength="5" maxlength="150" [(ngModel)]="model.text"
+        #text="ngModel"></textarea>
+      <input class="chirp-submit" id="btnSubmitChirp" [disabled]="formSubmitChirp.form.invalid" value="Publish"
+        type="submit">
     </form>
-
     <div style="color:red" [hidden]="text.valid || text.pristine">
       Chirp text must be must be between 5 and 150 symbols.
     </div>
-
     <div id="myStats" class="user-details">
       <span>{{chirpsCount}} chirps</span> |
       <span>{{following}} following</span> |
@@ -20,18 +18,21 @@
   </div>
   <div id="chirps" class="chirps">
     <h2 class="titlebar">My Chirps</h2>
-    <article class="chirp" *ngFor="let c of chirps">
-      <div class="titlebar">
-        <a routerLink="/feed/{{username}}" class="chirp-author">{{c.user.name}}</a>
-        <span class="chirp-time">
-          <a routerLink="/editChirp/{{c.id}}">edit </a>
-          <a class="pseudolink" (click)="deleteChirp(c.id)">delete </a> {{c.time}}
-        </span>
+    <div class="lds-dual-ring" *ngIf="isLoading"></div>
+    <div *ngIf="!isLoading">
+      <article class="chirp" *ngFor="let c of chirps">
+        <div class="titlebar">
+          <a routerLink="/feed/{{username}}" class="chirp-author">{{c.user.name}}</a>
+          <span class="chirp-time">
+            <a routerLink="/editChirp/{{c.id}}">edit </a>
+            <a class="pseudolink" (click)="deleteChirp(c.id)">delete </a> {{c.time}}
+          </span>
+        </div>
+        <p>{{c.content}}</p>
+      </article>
+      <div class="chirp" *ngIf="!chirps?.length">
+        <span class="loading">No chirps in database</span>
       </div>
-      <p>{{c.content}}</p>
-    </article>
-    <div class="chirp" *ngIf="!chirps?.length">
-      <span class="loading">No chirps in database</span>
     </div>
   </div>
 </div>

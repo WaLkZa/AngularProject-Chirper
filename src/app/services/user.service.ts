@@ -13,27 +13,24 @@ export class UserService {
         return this.http.get<any>(url + `/${userId}`, { headers: this.createAuthHeaders("Basic") })
     }
 
-    loadUserFollowers(username: string) {
-        let endpoint = `?query={"subscriptions":"${username}"}`
-
-        return this.http.get<any>(url + endpoint, { headers: this.createAuthHeaders("Kinvey") })
+    loadUserStats(userId: number) {
+        return this.http.get<any>(url + `/stats/${userId}`, { headers: this.createAuthHeaders("Basic") })
     }
 
     loadAllUsers() {
         return this.http.get<any>(url + '/all', { headers: this.createAuthHeaders("Bearer") })
     }
 
-    modifyUser(userId, newSubs) {
-        let newUser = {
-            subscriptions: newSubs
-        }
-
-        //return requester.update('user', userId, 'kinvey', newUser)
-        return this.http.put(url + userId, JSON.stringify(newUser), { headers: this.createAuthHeaders("Kinvey") })
+    followUser(userId) {
+        return this.http.get<any>(url + `/follow/${userId}`, { headers: this.createAuthHeaders("Bearer") })
     }
 
     deleteUser(userId) {
         return this.http.delete(url + `${userId}?hard=true`, { headers: this.createAuthHeaders("Master") })
+    }
+
+    isUserFollowed(userId) {
+        return this.http.get<any>(url + `/is-followed/${userId}`, { headers: this.createAuthHeaders("Bearer") })
     }
 
     private createAuthHeaders(type: string) {

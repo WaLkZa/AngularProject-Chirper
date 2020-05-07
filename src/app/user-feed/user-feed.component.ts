@@ -18,6 +18,7 @@ export class UserFeedComponent implements OnInit {
   following: number
   followers: number
   chirps
+  isLoading: boolean = true
 
   constructor(
     private chirpService: ChirpService,
@@ -50,37 +51,26 @@ export class UserFeedComponent implements OnInit {
   }
 
   loadData() {
-    this.chirpService
-      .loadAllChirpsByUserID(this.userId)
-      .subscribe(result => {
-        let chirps = result.chirps;
-        
+    forkJoin(
+      [
+        this.chirpService.loadAllChirpsByUserID(this.userId),
+        this.userService.loadUserStats(this.userId)
+      ])
+      .subscribe(([resultChirps, resultStats]) => {
+        let chirps = resultChirps.chirps;
+
+        this.following = resultStats.stats[0].followingCount;
+        this.followers = resultStats.stats[0].followersCount;
         this.chirpsCount = chirps.length
-        
+
         chirps.forEach(c => {
           c.time = this.dateConvertor(c.dateCreated)
-          c.isAuthor = c.author === localStorage.getItem('username')
+          c.isAuthor = c.userId === this.userId
         })
 
         this.chirps = chirps
+        this.isLoading = false;
       })
-    // forkJoin(
-    //   [
-    //     this.chirpService.loadAllChirpsByUsername(this.username),
-    //     this.userService.loadUserFollowers(this.username),
-    //     this.userService.loadUserByUsername(this.username)
-    //   ]).subscribe(([chirpsArr, followersArr, user]) => {
-    //     this.chirpsCount = chirpsArr.length
-    //     this.following = user[0].subscriptions.length
-    //     this.followers = followersArr.length
-
-    //     chirpsArr.forEach(c => {
-    //       c.time = this.dateConvertor(c._kmd.ect)
-    //       c.isAuthor = c.author === localStorage.getItem('username')
-    //     })
-
-    //     this.chirps = chirpsArr
-    //   })
   }
 
   dateConvertor(dateIsoFormat) {

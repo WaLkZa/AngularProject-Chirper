@@ -11,10 +11,8 @@ export class ChirpService {
         private authService: AuthService) {
     }
 
-    loadFollowersChirps(subs) {
-        let endpoint = `chirps?query={"author":{"$in": [${subs}]}}&sort={"_kmd.ect": -1}`
-
-        return this.http.get<any>(url + endpoint, { headers: this.createAuthHeaders("Bearer") })
+    loadAllFollowedChirps() {
+        return this.http.get<any>(url + '/all-followed', { headers: this.createAuthHeaders("Bearer") })
     }
 
     loadAllChirpsByUserID(userId: number) {
