@@ -57,11 +57,15 @@ export class AuthService {
     }
 
     saveSession(userInfo) {
-        let userAuth = userInfo.token;
-        localStorage.setItem('authtoken', userAuth);
-        let username = userInfo.username;
+        const {
+            token,
+            username,
+            userId
+        } = userInfo;
+
+        localStorage.setItem('authtoken', token);
         localStorage.setItem('username', username);
-        localStorage.setItem('userId', userInfo.userId);
+        localStorage.setItem('userId', userId);
         //localStorage.setItem('subscriptions', JSON.stringify(userInfo.subscriptions));
 
         // if (userInfo._kmd.roles) {

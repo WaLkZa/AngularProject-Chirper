@@ -22,7 +22,7 @@
     <div *ngIf="!isLoading">
       <article class="chirp" *ngFor="let c of chirps">
         <div class="titlebar">
-          <a routerLink="/feed/{{username}}" class="chirp-author">{{c.user.name}}</a>
+          <a routerLink="/feed/{{c.user.id}}" class="chirp-author">{{c.user.name}}</a>
           <span class="chirp-time">
             <a routerLink="/editChirp/{{c.id}}">edit </a>
             <a class="pseudolink" (click)="deleteChirp(c.id)">delete </a> {{c.time}}
