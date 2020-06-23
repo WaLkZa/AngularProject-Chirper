@@ -1,3 +1,4 @@
-# AngularProject-Chirper
+# chirper-fullstack-app
+The app features a sign up form, chirps (tweets) and likes. Users can: view/create/update/delete own chirps, view feed pages, discover new people, find all chirps by a specific user, follow or unfollow users.
 
-Web application (SPA) using Angular with cloud-based backend (Kinvey). The app keeps users and chirps (tweets). Users can register, login, logout, view feed page (all chirps from followers sorted by time in descending order), create a chirp, delete a chirp, view own chirps, discover new people, get all chirps by specific user (sorted by time in descending order), follow or unfollow a user. Admins have access to edit and delete chirps to all users. Also they can delete users.
+Backend part can be found [here](https://github.com/WaLkZa/chirper-fullstack-app)
